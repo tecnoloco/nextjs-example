@@ -5,10 +5,10 @@ import { eq } from 'drizzle-orm'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: any } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const id = params.id
+    const id = parseInt(params.id)
 
     const issue = await db.query.issues.findFirst({
       where: eq(issues.id, id),
