@@ -3,8 +3,6 @@ import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
 import { cache } from 'react'
 import { issues, users } from '@/db/schema'
-import { mockDelay } from './utils'
-import { unstable_cacheTag as cacheTag } from 'next/cache'
 
 // Current user
 export const getCurrentUser = cache(async () => {
@@ -19,8 +17,6 @@ export const getCurrentUser = cache(async () => {
   ) {
     return null
   }
-
-  await mockDelay(700)
   try {
     const result = await db
       .select()
@@ -48,7 +44,6 @@ export const getUserByEmail = cache(async (email: string) => {
 // Fetcher functions for React Query
 export async function getIssue(id: number) {
   try {
-    await mockDelay(700)
     const result = await db.query.issues.findFirst({
       where: eq(issues.id, id),
       with: {
@@ -63,10 +58,7 @@ export async function getIssue(id: number) {
 }
 
 export async function getIssues() {
-  'use cache'
-  cacheTag('issues')
   try {
-    await mockDelay(700)
     const result = await db.query.issues.findMany({
       with: {
         user: true,
